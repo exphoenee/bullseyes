@@ -3,7 +3,7 @@ name: Build and Deploy Vite site to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - staging   # ha main-et szeretnél: cseréld ide
 
 permissions:
   contents: read
@@ -23,3 +23,30 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure Pages
+        # friss, nem-deprecated verzió
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact for GitHub Pages
+        # ez az official Pages-artifact uploader (v1) rendben van
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
