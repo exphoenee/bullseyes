@@ -1,6 +1,6 @@
-import GameObject from "./GameObject";
+import GameObject from "../core/GameObject";
 
-import { enemy, player, obstacle, egg } from "./constants/names";
+import { enemy, player, obstacle, egg } from "../constants/names";
 
 class Enemy extends GameObject {
   constructor(game) {
@@ -47,8 +47,8 @@ class Enemy extends GameObject {
   }
 
   objectMove() {
-    this.collisionX -= this.speedX * this.speedModifier;
-    this.collisionY -= this.speedY * this.speedModifier;
+    this.collisionX -= this.speedX * this.speedModifier * this.game.frameFactor;
+    this.collisionY -= this.speedY * this.speedModifier * this.game.frameFactor;
     if (this.spriteX + this.width < 0) this.init();
 
     if (this.collisionX > this.game.width - this.collisionRadius)
@@ -64,7 +64,7 @@ class Enemy extends GameObject {
     this.spriteX = this.collisionX - this.width * this.spriteOffsetX;
     this.spriteY = this.collisionY - this.height * this.spriteOffsetY;
 
-    this.lifeTime += 16;
+    this.lifeTime += this.game.deltaTime;
     if (this.lifeTime > this.lifeTimeLimit) this.kill();
   }
 

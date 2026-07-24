@@ -1,6 +1,6 @@
-import GameObject from "./GameObject";
+import GameObject from "../core/GameObject";
 
-import { enemy, obstacle, egg, player, larva } from "./constants/names";
+import { enemy, obstacle, egg, player, larva } from "../constants/names";
 
 class Larva extends GameObject {
   constructor(game, position) {
@@ -58,14 +58,7 @@ class Larva extends GameObject {
   }
 
   removeObject() {
-    this.game.larvas = this.game.larvas.filter((larva) => larva.id !== this.id);
-  }
-
-  reduceOpacity() {
-    this.opacity =
-      this.opacity - this.opacityModifier < 0.1
-        ? 0
-        : this.opacity - this.opacityModifier;
+    this.game.larvae = this.game.larvae.filter((larva) => larva.id !== this.id);
   }
 
   eaten() {
@@ -87,8 +80,8 @@ class Larva extends GameObject {
   }
 
   objectMove() {
-    this.collisionX -= this.speedX * this.speedModifier;
-    this.collisionY -= this.speedY * this.speedModifier;
+    this.collisionX -= this.speedX * this.speedModifier * this.game.frameFactor;
+    this.collisionY -= this.speedY * this.speedModifier * this.game.frameFactor;
 
     if (this.collisionX > this.game.width - this.collisionRadius)
       this.collisionX = this.game.width - this.collisionRadius;

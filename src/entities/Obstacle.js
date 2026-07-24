@@ -1,6 +1,6 @@
-import GameObject from "./GameObject";
+import GameObject from "../core/GameObject";
 
-import { obstacle } from "./constants/names";
+import { obstacle } from "../constants/names";
 
 class Obstacle extends GameObject {
   constructor(game) {

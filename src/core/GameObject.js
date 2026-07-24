@@ -1,9 +1,9 @@
-import Sparks from "./Sparks";
-import Firefly from "./Firefly";
+import Sparks from "../particles/Sparks";
+import Firefly from "../particles/Firefly";
 
 import { v4 as uuid } from "uuid";
 
-import { pluralNames } from "./constants/names";
+import { pluralNames } from "../constants/names";
 
 class GameObject {
   constructor(
@@ -11,14 +11,7 @@ class GameObject {
     {
       gameObjectName,
       isSingleton = false,
-      imageSettings = {
-        imageId,
-        spriteWidth,
-        spriteHeight,
-        spriteOffsetX,
-        spriteOffsetY,
-        variant,
-      },
+      imageSettings = {},
       animationSettings = {
         animationFrames: 0,
         animationDirection: 0,
@@ -27,10 +20,7 @@ class GameObject {
       },
       collisionProperties = {
         gameObjectNames: [],
-        collisionRadius,
         collisionOpacity: 0.5,
-        collisionX,
-        collisionY,
         margin: 0,
       },
       motionSettings = { speedX: 0, speedY: 0, speedModifier: 1 },
@@ -79,8 +69,6 @@ class GameObject {
     if (motionSettings) {
       this.speedX = motionSettings.speedX || 0;
       this.speedY = motionSettings.speedY || 0;
-      this.dx;
-      this.dy;
       this.speedModifier = motionSettings.speedModifier;
     }
 
@@ -95,8 +83,6 @@ class GameObject {
         this.collisionX = collisionProperties.collisionX;
         this.collisionY = collisionProperties.collisionY;
       } else {
-        this.collisionX;
-        this.collisionY;
         this.initPosition();
       }
     }
@@ -112,12 +98,7 @@ class GameObject {
       this.animationFrame = animationSettings.animationFrame;
     }
 
-    if (this.name === "obstacle") {
-    }
-
     // set the sprite position
-    this.spriteX;
-    this.spriteY;
     this.updateSpritePosition();
   }
 

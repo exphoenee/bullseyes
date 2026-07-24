@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import { particle } from "./constants/names.js";
+import { particle } from "../constants/names.js";
 
 class Particle {
   constructor(game, position, color) {

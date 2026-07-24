@@ -1,7 +1,7 @@
-import Player from "./Player.js";
-import Obstacle from "./Obstacle.js";
-import Egg from "./Egg.js";
-import Enemy from "./Enemy.js";
+import Player from "../entities/Player.js";
+import Obstacle from "../entities/Obstacle.js";
+import Egg from "../entities/Egg.js";
+import Enemy from "../entities/Enemy.js";
 
 class Game {
   constructor() {
@@ -17,10 +17,12 @@ class Game {
     this.fps = 60;
     this.lastRender = 0;
     this.deltaTime = 0;
+    // movement scaled to a 60 FPS baseline so physics is frame-rate independent
+    this.frameFactor = 1;
 
     // game properties
     this.winningScore = 21;
-    this.loosingScore = -10;
+    this.losingScore = -10;
     this.gameOver = false;
 
     // game area properties
@@ -67,7 +69,7 @@ class Game {
     this.enemyInterval = 1000;
 
     // larva properties
-    this.larvas = [];
+    this.larvae = [];
     // hatching properties
     this.hatchInterval = 5000;
 
@@ -81,36 +83,32 @@ class Game {
       pressed: false,
     };
 
+    // map a pointer position (in CSS pixels) onto the internal 1280x720 space,
+    // so the controls stay correct however the canvas is scaled/letterboxed
+    const setMousePosition = (clientX, clientY) => {
+      const rect = this.canvas.getBoundingClientRect();
+      this.mouse.x = ((clientX - rect.left) / rect.width) * this.width;
+      this.mouse.y = ((clientY - rect.top) / rect.height) * this.height;
+    };
+
     this.canvas.addEventListener("mousedown", (e) => {
-      this.mouse.x = e.offsetX;
-      this.mouse.y = e.offsetY;
+      setMousePosition(e.clientX, e.clientY);
       this.mouse.pressed = true;
     });
 
     this.canvas.addEventListener("mouseup", (e) => {
-      this.mouse.x = e.offsetX;
-      this.mouse.y = e.offsetY;
+      setMousePosition(e.clientX, e.clientY);
       this.mouse.pressed = false;
     });
+
     this.canvas.addEventListener("mousemove", (e) => {
-      if (this.mouse.pressed) {
-        this.mouse.x = e.offsetX;
-        this.mouse.y = e.offsetY;
-      }
+      if (this.mouse.pressed) setMousePosition(e.clientX, e.clientY);
     });
 
     // key properties
     window.addEventListener("keydown", (e) => {
-      if (e.key == "d") this.debug = !this.debug;
-    });
-
-    // key properties
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "r") {
-        if (this.gameOver) {
-          this.restart();
-        }
-      }
+      if (e.key === "d") this.debug = !this.debug;
+      if (e.key === "r" && this.gameOver) this.restart();
     });
   }
 
@@ -120,7 +118,7 @@ class Game {
     this.obstacles = [];
     this.eggs = [];
     this.enemies = [];
-    this.larvas = [];
+    this.larvae = [];
     this.particles = [];
     this.player.initPosition();
     this.enemyTimer = 0;
@@ -141,7 +139,7 @@ class Game {
       ...this.obstacles,
       ...this.eggs,
       ...this.enemies,
-      ...this.larvas,
+      ...this.larvae,
       ...this.particles,
     ];
     this.gameObjects.sort((a, b) => a.collisionY - b.collisionY);
@@ -166,7 +164,7 @@ class Game {
     this.context.restore();
   }
 
-  looseMessage() {
+  loseMessage() {
     this.context.save();
     this.context.font = "130px Helvetica";
     this.context.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -244,9 +242,13 @@ class Game {
   }
 
   animate(timeStamp) {
-    if (timeStamp - this.lastRender > 1000 / this.fps) {
-      this.render();
+    const frameTime = 1000 / this.fps;
+    if (timeStamp - this.lastRender > frameTime) {
+      // clamp to 2 frames to avoid huge jumps on the first frame or after a tab switch
+      this.deltaTime = Math.min(timeStamp - this.lastRender, frameTime * 2);
+      this.frameFactor = this.deltaTime / frameTime;
       this.lastRender = timeStamp;
+      this.render();
 
       if (
         this.eggTimer > this.eggInterval &&
@@ -255,7 +257,7 @@ class Game {
         this.addEgg();
         this.eggTimer = 0;
       } else {
-        this.eggTimer += Math.random() * 16;
+        this.eggTimer += this.deltaTime;
       }
 
       if (
@@ -265,7 +267,7 @@ class Game {
         this.addEnemy();
         this.enemyTimer = 0;
       } else {
-        this.enemyTimer += Math.random() * 16;
+        this.enemyTimer += this.deltaTime;
       }
     }
 
@@ -274,8 +276,8 @@ class Game {
       this.gameOver = true;
     }
 
-    if (this.score <= this.loosingScore) {
-      this.looseMessage();
+    if (this.score <= this.losingScore) {
+      this.loseMessage();
       this.gameOver = true;
     }
 

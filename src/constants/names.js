@@ -11,6 +11,6 @@ export const pluralNames = {
   [obstacle]: "obstacles",
   [egg]: "eggs",
   [enemy]: "enemies",
-  [larva]: "larvas",
+  [larva]: "larvae",
   [particle]: "particles",
 };

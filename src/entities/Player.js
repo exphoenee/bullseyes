@@ -1,4 +1,4 @@
-import GameObject from "./GameObject";
+import GameObject from "../core/GameObject";
 
 import {
   player,
@@ -9,7 +9,7 @@ import {
   particle,
   spark,
   firefly,
-} from "./constants/names";
+} from "../constants/names";
 
 class Player extends GameObject {
   constructor(game) {
@@ -63,8 +63,8 @@ class Player extends GameObject {
       this.speedY = this.dy / distance || 0;
     }
 
-    this.collisionX += this.speedX * this.speedModifier;
-    this.collisionY += this.speedY * this.speedModifier;
+    this.collisionX += this.speedX * this.speedModifier * this.game.frameFactor;
+    this.collisionY += this.speedY * this.speedModifier * this.game.frameFactor;
 
     if (this.collisionX < this.collisionRadius)
       this.collisionX = this.collisionRadius;

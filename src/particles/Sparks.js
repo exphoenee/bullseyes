@@ -6,13 +6,15 @@ class Sparks extends Particle {
   }
 
   objectMove() {
-    this.angle += this.angleSpeed;
-    this.collisionX += this.speedX * Math.cos(this.angle);
-    this.collisionY -= this.speedY * Math.sin(this.angle);
+    this.angle += this.angleSpeed * this.game.frameFactor;
+    this.collisionX +=
+      this.speedX * Math.cos(this.angle) * this.game.frameFactor;
+    this.collisionY -=
+      this.speedY * Math.sin(this.angle) * this.game.frameFactor;
 
     if (this.collisionY < 0) this.removeObject();
     if (this.particleTime <= 0) this.removeObject();
-    this.particleTime -= 16 + Math.random() * 16;
+    this.particleTime -= this.game.deltaTime;
   }
 }
 

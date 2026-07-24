@@ -1,7 +1,7 @@
 import Larva from "./Larva.js";
-import GameObject from "./GameObject.js";
+import GameObject from "../core/GameObject.js";
 
-import { egg, obstacle, enemy, player } from "./constants/names.js";
+import { egg, obstacle, enemy, player } from "../constants/names.js";
 
 class Egg extends GameObject {
   constructor(game) {
@@ -23,8 +23,6 @@ class Egg extends GameObject {
       },
     });
 
-    // this.spriteX = this.collisionX - this.width * this.spriteOffsetX;
-    // this.spriteY = this.collisionY - this.height * this.spriteOffsetY;
     // hatching properties
     this.hatchTimer = 0;
   }
@@ -39,17 +37,7 @@ class Egg extends GameObject {
   }
 
   draw() {
-    this.game.context.drawImage(
-      this.image,
-      0,
-      0,
-      this.spriteWidth,
-      this.spriteHeight,
-      this.spriteX,
-      this.spriteY,
-      this.width,
-      this.height
-    );
+    super.draw();
     const displayHatchTimer =
       Math.floor((this.game.hatchInterval - this.hatchTimer) / 1000) + 1;
     this.game.context.save();
@@ -60,18 +48,17 @@ class Egg extends GameObject {
       this.spriteY - this.height * 0.1
     );
     this.game.context.restore();
-    this.drawHitbox();
   }
 
   hatching() {
-    this.hatchTimer += 16 + 16 * Math.random();
+    this.hatchTimer += this.game.deltaTime;
     if (this.hatchTimer >= this.game.hatchInterval) {
       this.game.eggs = this.game.eggs.filter((egg) => egg.id !== this.id);
       const position = {
         x: this.collisionX,
         y: this.collisionY,
       };
-      this.game.larvas.push(new Larva(this.game, position));
+      this.game.larvae.push(new Larva(this.game, position));
     }
   }
 
