@@ -10,7 +10,10 @@ It started from the [freeCodeCamp JS game crash course](https://www.youtube.com/
 but the code has been completely refactored into a class hierarchy (`GameObject` base class with
 `Player`, `Enemy`, `Egg`, `Larva`, `Obstacle` and particle subclasses).
 
-**[▶ Play it live here!](https://bullseyes.netlify.app/)**
+**Play it live:**
+
+- ▶ [GitHub Pages](https://exphoenee.github.io/bullseyes/)
+- ▶ [Netlify](https://bullseyes.netlify.app/)
 
 ## Installation
 
