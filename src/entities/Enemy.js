@@ -21,6 +21,9 @@ class Enemy extends GameObject {
       motionSettings: {
         speedModifier: 1,
         speedX: Math.random() * 3 + 0.5,
+        // vertical drift with a random up/down direction, so toads weave
+        // up and down while advancing, like the player can move freely
+        speedY: (Math.random() * 1.5 + 0.5) * (Math.random() < 0.5 ? 1 : -1),
       },
     });
 
@@ -53,10 +56,15 @@ class Enemy extends GameObject {
 
     if (this.collisionX > this.game.width - this.collisionRadius)
       this.collisionX = this.game.width - this.collisionRadius;
-    if (this.collisionY < this.game.topMargin + this.collisionRadius)
+    // bounce off the top/bottom edges so the vertical drift keeps weaving
+    if (this.collisionY < this.game.topMargin + this.collisionRadius) {
       this.collisionY = this.game.topMargin + this.collisionRadius;
-    if (this.collisionY > this.game.height - this.collisionRadius)
+      this.speedY *= -1;
+    }
+    if (this.collisionY > this.game.height - this.collisionRadius) {
       this.collisionY = this.game.height - this.collisionRadius;
+      this.speedY *= -1;
+    }
 
     this.animationFrame =
       this.animationFrame < this.animationFrames ? this.animationFrame + 1 : 0;
