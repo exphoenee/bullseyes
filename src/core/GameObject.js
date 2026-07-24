@@ -10,7 +10,6 @@ class GameObject {
     game,
     {
       gameObjectName,
-      isSingleton = false,
       imageSettings = {},
       animationSettings = {
         animationFrames: 0,
@@ -26,13 +25,6 @@ class GameObject {
       motionSettings = { speedX: 0, speedY: 0, speedModifier: 1 },
     }
   ) {
-    if (isSingleton) {
-      if (typeof GameObject.instance === "object") {
-        throw new Error("GameObject is a singleton");
-      }
-      GameObject.instance = this;
-    }
-
     // set the game
     this.game = game;
 
@@ -168,12 +160,14 @@ class GameObject {
   }
 
   pushObject({ distance, sumOfRadii, dx, dy }) {
+    // two objects at the exact same spot give distance 0; skip to avoid NaN
+    if (distance === 0) return;
     this.collisionX -= (dx / distance) * (sumOfRadii - distance);
     this.collisionY -= (dy / distance) * (sumOfRadii - distance);
   }
 
   objectDirection() {
-    if (this.animationDirection >= 0) {
+    if (this.animationDirection > 0) {
       const angleStep = 360 / this.animationDirection;
 
       const angle = Math.floor(

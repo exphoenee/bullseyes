@@ -5,11 +5,6 @@ import Enemy from "../entities/Enemy.js";
 
 class Game {
   constructor() {
-    if (typeof Game.instance === "object") {
-      return Game.instance;
-    }
-    Game.instance = this;
-
     // application mode
     this.debug = false;
 
@@ -188,7 +183,7 @@ class Game {
     const sumOfRadii = a.collisionRadius + b.collisionRadius + distanceBuffer;
     if (distance < sumOfRadii) {
       return {
-        collision: distance < sumOfRadii,
+        collision: true,
         distance,
         sumOfRadii,
         dx,
@@ -208,7 +203,7 @@ class Game {
 
       let collision = false;
 
-      // earier I added the player to the obstacles array, but that was a bad idea because the player takes space form obstacles and less obstacles can be generated
+      // earlier I added the player to the obstacles array, but that was a bad idea because the player takes space from obstacles and fewer obstacles can be generated
       [...this.obstacles].forEach((obstacle) => {
         const a = testObstacle;
         const b = obstacle;

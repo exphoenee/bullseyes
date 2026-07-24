@@ -1,21 +1,11 @@
 import GameObject from "../core/GameObject";
 
-import {
-  player,
-  obstacle,
-  enemy,
-  egg,
-  larva,
-  particle,
-  spark,
-  firefly,
-} from "../constants/names";
+import { player, obstacle } from "../constants/names";
 
 class Player extends GameObject {
   constructor(game) {
     super(game, {
       gameObjectName: player,
-      isSingleton: false,
       imageSettings: {
         imageId: "bull",
         spriteWidth: 255,

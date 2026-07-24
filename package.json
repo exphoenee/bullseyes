@@ -1,5 +1,5 @@
 {
-  "name": "bullseye",
+  "name": "bullseyes",
   "private": true,
   "version": "0.1.0",
   "description": "A canvas-based 2D arcade game built with vanilla JavaScript (OOP) and Vite: protect the hatching larvae from the toads.",

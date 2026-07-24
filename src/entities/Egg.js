@@ -7,7 +7,6 @@ class Egg extends GameObject {
   constructor(game) {
     super(game, {
       gameObjectName: egg,
-      isSingleton: false,
       imageSettings: {
         imageId: "egg",
         spriteWidth: 110,

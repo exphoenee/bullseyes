@@ -28,7 +28,7 @@ class Obstacle extends GameObject {
     this.collisionY = Math.random() * this.game.height;
   }
 
-  moveObject() {}
+  objectMove() {}
 
   collision() {}
 
@@ -36,7 +36,7 @@ class Obstacle extends GameObject {
 
   update() {
     this.draw();
-    this.moveObject();
+    this.objectMove();
     this.collision();
   }
 }
