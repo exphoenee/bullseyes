@@ -41,6 +41,7 @@ class Larva extends GameObject {
   initPosition() {}
 
   collision() {
+    let touchedByEnemy = false;
     [
       this.game.player,
       ...this.game.obstacles,
@@ -52,9 +53,13 @@ class Larva extends GameObject {
 
       if (collision) {
         this.pushObject(collisionInfo);
-        if (object.areYou(enemy)) this.eaten();
+        if (object.areYou(enemy)) touchedByEnemy = true;
       }
     });
+
+    // drain the larva at most once per frame, no matter how many toads are
+    // touching, so two overlapping toads don't eat it twice as fast
+    if (touchedByEnemy) this.eaten();
   }
 
   removeObject() {

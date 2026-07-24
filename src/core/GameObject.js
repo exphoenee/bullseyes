@@ -196,10 +196,10 @@ class GameObject {
   }
 
   reduceOpacity() {
-    this.opacity =
-      this.opacity - this.opacityModifier < 0.1
-        ? 0
-        : this.opacity - this.opacityModifier;
+    // time-scaled so the fade takes a consistent wall-clock time instead of a
+    // fixed number of frames (frame-rate independent, matches objectMove)
+    const step = this.opacityModifier * this.game.frameFactor;
+    this.opacity = this.opacity - step < 0.1 ? 0 : this.opacity - step;
   }
 
   kill() {
