@@ -39,6 +39,34 @@
   <div id="game">
     <canvas id="canvas1"></canvas>
     <img id="overlay" src="images/overlay.png" alt="overlay" />
+
+    <div id="joystick-zone" class="hidden"></div>
+
+    <button id="pause-btn" class="hidden" aria-label="Pause game" title="Pause">⏸</button>
+
+    <div id="loading-screen" class="screen">
+      <div class="spinner"></div>
+      <p>Loading…</p>
+    </div>
+
+    <div id="pause-menu" class="screen hidden">
+      <h1>Bullseye</h1>
+      <div class="menu-buttons">
+        <button id="play-btn" class="menu-btn">Play</button>
+        <button id="restart-btn" class="menu-btn hidden">Restart</button>
+      </div>
+      <div class="controls-toggle" role="group" aria-label="Controls">
+        <span class="controls-label">Controls</span>
+        <button id="controls-mouse-btn" class="toggle-btn">Mouse</button>
+        <button id="controls-touch-btn" class="toggle-btn">Touch</button>
+      </div>
+      <p class="menu-hint">Protect the hatching larvae from the toads. Press Esc anytime to pause.</p>
+    </div>
+
+    <div id="orientation-warning" class="screen hidden">
+      <div class="rotate-icon">⟳</div>
+      <p>Please rotate your device to landscape to play Bullseye.</p>
+    </div>
   </div>
 
   <!-- sprite sources, hidden -->

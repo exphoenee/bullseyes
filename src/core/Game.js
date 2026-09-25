@@ -19,6 +19,8 @@ class Game {
     this.winningScore = 21;
     this.losingScore = -10;
     this.gameOver = false;
+    this.hasStarted = false;
+    this.paused = true;
 
     // game area properties
     this.width = 1280;
@@ -125,6 +127,24 @@ class Game {
       pressed: false,
     };
     this.init();
+    this.start();
+  }
+
+  start() {
+    this.hasStarted = true;
+    this.paused = false;
+    window.requestAnimationFrame(this.animate.bind(this));
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  resume() {
+    if (this.gameOver || !this.hasStarted) return;
+    this.paused = false;
+    this.lastRender = 0;
+    window.requestAnimationFrame(this.animate.bind(this));
   }
 
   render() {
@@ -237,6 +257,8 @@ class Game {
   }
 
   animate(timeStamp) {
+    if (this.paused) return;
+
     const frameTime = 1000 / this.fps;
     if (timeStamp - this.lastRender > frameTime) {
       // clamp to 2 frames to avoid huge jumps on the first frame or after a tab switch
@@ -276,12 +298,12 @@ class Game {
       this.gameOver = true;
     }
 
-    if (!this.gameOver) window.requestAnimationFrame(this.animate.bind(this));
+    if (!this.gameOver && !this.paused)
+      window.requestAnimationFrame(this.animate.bind(this));
   }
 
   init() {
     this.addObstacles();
-    this.animate(this.lastRender);
   }
 }
 
